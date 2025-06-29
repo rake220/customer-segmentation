@@ -9,8 +9,12 @@ import pandas as pd
 
 app = FastAPI()
 
-# Load the CSV
+# Load the CSV file (make sure segmented_customers.csv is in the same directory)
 df = pd.read_csv("segmented_customers.csv")
+
+@app.get("/")
+def root():
+    return {"message": "Welcome to the Customer Segmentation API. Visit /docs for API documentation."}
 
 @app.get("/customer/{customer_id}")
 def get_customer_info(customer_id: int):
@@ -21,7 +25,7 @@ def get_customer_info(customer_id: int):
 
 @app.get("/segment/{segment_id}")
 def get_customers_in_segment(segment_id: int):
-    customers = df[df["Segment"].astype(str) == str(segment_id)]
+    customers = df[df["Segment"] == segment_id]
     if customers.empty:
         raise HTTPException(status_code=404, detail=f"No customers found in segment {segment_id}")
     return customers[["CustomerID", "Gender", "Age"]].to_dict(orient="records")
