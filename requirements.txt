@@ -6,3 +6,5 @@ ollama
 requests
 dash
 gradio
+scikit-learn
+numpy
